@@ -9,8 +9,8 @@ contract NFT is ERC721Enumerable, Ownable {
   string public baseURI;
   string public baseExtension = ".json";
   string public notRevealedUri;
-  uint256 public cost = 1 ether;
-  uint256 public maxSupply = 10000;
+  uint256 public cost = 0.07 ether;
+  uint256 public maxSupply = 1000;
   uint256 public maxMintAmount = 20;
   uint256 public nftPerAddressLimit = 3;
   bool public paused = false;
@@ -50,7 +50,9 @@ contract NFT is ERC721Enumerable, Ownable {
        
         require(msg.value >= cost * _mintAmount, "insufficient funds");
     }
-    
+            if(onlyWhitelisted == true) {
+            devMintTokensToAddresses
+            }
     for (uint256 i = 1; i <= _mintAmount; i++) {
         addressMintedBalance[msg.sender]++;
       _safeMint(msg.sender, supply + i);
@@ -65,6 +67,16 @@ contract NFT is ERC721Enumerable, Ownable {
     }
     return false;
   }
+  
+  
+function devMintTokensToAddresses(address[] memory _whitelistedAddresses) external {
+
+for (uint256 i; i < _whitelistedAddresses.length; i++) {
+
+ _safeMint(msg.sender, supply + i);
+
+}
+}
 
   function walletOfOwner(address _owner)
     public
